@@ -42,16 +42,37 @@ await update_task_progress({
 
 ## 🛠️ 開発環境のセットアップ
 
+### 前提条件
+
+- Node.js 18+ （ローカル環境）
+- Docker および Docker Compose
+- Git
+
+### セットアップ手順
+
 ```bash
 # リポジトリのクローン
 git clone https://github.com/naok1207/workflow-visualizer.git
 cd workflow-visualizer
 
-# 依存関係のインストール
+# 依存関係のインストール（ローカル）
 npm install
 
-# 開発サーバーの起動
-npm run dev
+# Dockerコンテナの起動（MCPサーバー、DB等）
+docker-compose up -d
+
+# フロントエンド開発サーバーの起動（ローカル）
+npm run dev:frontend
+```
+
+### 環境の停止
+
+```bash
+# Dockerコンテナの停止
+docker-compose down
+
+# データを削除する場合
+docker-compose down -v
 ```
 
 ## 📁 プロジェクト構造

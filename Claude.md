@@ -49,6 +49,30 @@ Claude Codeが複雑なプロジェクトで作業する際に：
 - **Database**: SQLite (Better-SQLite3)
 - **Build**: Vite
 - **Test**: Vitest + Playwright
+- **Infrastructure**: Docker + Docker Compose
+
+## 🏗️ 環境構築方針
+
+### 開発環境の分離
+
+1. **ローカル環境で実行**
+   - Node.js系ツール（npm, yarn等）
+   - フロントエンド開発サーバー（Vite）
+   - ビルドツール
+   - 開発用CLIツール
+
+2. **Docker環境で実行**
+   - MCPサーバー
+   - SQLiteデータベース
+   - WebSocketサーバー
+   - 将来的な追加サービス（Redis等）
+
+### なぜこの構成なのか
+
+- **開発効率**: フロントエンド開発はホットリロードが高速
+- **環境の一貫性**: サーバー・DB環境は全開発者で統一
+- **依存関係の分離**: システムサービスはコンテナ内に隔離
+- **本番環境との整合性**: 本番デプロイもDocker基盤を想定
 
 ## 📁 プロジェクト構造
 
