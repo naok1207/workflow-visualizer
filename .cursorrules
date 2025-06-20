@@ -1,0 +1,44 @@
+# Claude Code開発ルール
+
+## プロジェクト概要
+- 個人開発のワークフロー可視化システム
+- React + TypeScriptベース
+- 可視化にはReact Flowを使用
+- MCPサーバーによるClaude Code統合
+
+## 技術スタック
+- Frontend: React, TypeScript, React Flow, Zustand
+- Backend: Node.js, MCP Server
+- Database: SQLite (Better-SQLite3)
+- Real-time: WebSocket (Socket.io)
+
+## コーディング規約
+- TypeScript strict modeを使用
+- 関数型プログラミングを優先
+- コンポーネントは関数コンポーネントで実装
+- 状態管理はZustandを使用
+- セマンティックコミットメッセージを使用
+
+## ファイル構造
+- 機能ごとにフォルダを分割
+- コンポーネント、hooks、utilsを明確に分離
+- テストファイルは同一ディレクトリに配置
+
+## AI支援の活用方針
+- アーキテクチャ決定は人間が行う
+- 実装の詳細はAIが支援
+- テストケースの生成はAIを活用
+- ドキュメント生成もAIを活用
+
+## 開発フロー
+1. todo.mdから次のタスクを選択
+2. 適切なブランチを作成
+3. 実装とテスト
+4. ghコマンドでPR作成
+5. セルフレビューとマージ
+
+## 注意事項
+- 可視化機能と動的ワークフロー変更機能に注力
+- パフォーマンスを常に意識
+- ドキュメントは同時に更新
+- 決定事項はADRに記録
