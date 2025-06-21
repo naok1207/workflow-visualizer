@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* React Flow のスタイル */
+@import 'reactflow/dist/style.css';
+
+/* カスタムスタイル */
+@layer base {
+  html {
+    @apply text-gray-900;
+  }
+
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  /* カスタムノードのスタイル */
+  .react-flow__node-task {
+    @apply bg-white border-2 border-gray-300 rounded-lg shadow-md;
+    @apply hover:shadow-lg transition-shadow;
+  }
+
+  .react-flow__node-task.selected {
+    @apply border-primary-500;
+  }
+
+  .react-flow__node-step {
+    @apply bg-white border-2 border-gray-200 rounded-md shadow-sm;
+    @apply hover:shadow-md transition-shadow;
+  }
+
+  .react-flow__node-step.selected {
+    @apply border-primary-400;
+  }
+
+  /* カスタムエッジのスタイル */
+  .react-flow__edge-path {
+    @apply stroke-2;
+  }
+
+  .react-flow__edge.selected .react-flow__edge-path {
+    @apply stroke-primary-500;
+  }
+
+  /* コントロールパネル */
+  .control-panel {
+    @apply bg-white rounded-lg shadow-lg p-4;
+    @apply border border-gray-200;
+  }
+
+  /* タスクリスト */
+  .task-list-item {
+    @apply p-3 rounded-md hover:bg-gray-50 cursor-pointer;
+    @apply transition-colors border border-transparent;
+    @apply hover:border-gray-200;
+  }
+
+  .task-list-item.active {
+    @apply bg-primary-50 border-primary-200;
+  }
+}
+
+/* アニメーション */
+@keyframes pulse-progress {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.progress-pulse {
+  animation: pulse-progress 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
