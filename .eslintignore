@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+.next
+coverage
+*.log
+.DS_Store
+public
+*.config.js
+*.config.ts

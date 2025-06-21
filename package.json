@@ -1,0 +1,73 @@
+{
+  "name": "workflow-visualizer",
+  "version": "1.0.0",
+  "description": "Claude Code向けワークフロー可視化システム",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "mcp-server",
+    "shared",
+    "websocket-server"
+  ],
+  "scripts": {
+    "dev": "npm run dev:all",
+    "dev:all": "npm-run-all --parallel dev:frontend dev:mcp dev:websocket",
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:mcp": "npm run dev -w mcp-server",
+    "dev:websocket": "npm run dev -w websocket-server",
+    "build": "npm run build:all",
+    "build:all": "npm-run-all build:shared build:mcp build:websocket build:frontend",
+    "build:shared": "npm run build -w shared",
+    "build:frontend": "npm run build -w frontend",
+    "build:mcp": "npm run build -w mcp-server",
+    "build:websocket": "npm run build -w websocket-server",
+    "clean": "npm run clean -ws --if-present",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "lint": "npm run lint -ws --if-present",
+    "typecheck": "npm run typecheck -ws --if-present",
+    "test": "npm run test -ws --if-present",
+    "init:db": "npm run init:db -w mcp-server",
+    "reset": "npm run clean && rm -rf node_modules **/node_modules && npm install",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.0.10",
+    "lint-staged": "^15.2.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.2.4",
+    "typescript": "^5.3.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "claude-code",
+    "mcp",
+    "workflow",
+    "visualization",
+    "react-flow"
+  ],
+  "author": "naok1207",
+  "license": "MIT"
+}
