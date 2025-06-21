@@ -43,6 +43,64 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+## Docker構成
+
+### コンテナ分離方針
+
+**ローカル環境で実行:**
+- フロントエンド開発サーバー（Vite）
+- Node.js開発ツール（npm, yarn等）
+- ビルドツール
+- 開発用CLIツール
+
+**Docker環境で実行:**
+- MCPサーバー
+- SQLiteデータベース（Volume管理）
+- WebSocketサーバー
+- 将来的な追加サービス（Redis、監視ツール等）
+
+### docker-compose.yml構成
+
+```yaml
+version: '3.8'
+
+services:
+  mcp-server:
+    build: ./mcp-server
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./data:/app/data
+      - ./mcp-server/src:/app/src
+    environment:
+      - NODE_ENV=development
+      - DATABASE_PATH=/app/data/workflow.db
+    depends_on:
+      - db-init
+
+  websocket-server:
+    build: ./websocket-server
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+
+  db-init:
+    build: ./database
+    volumes:
+      - ./data:/data
+    command: /app/init-db.sh
+
+volumes:
+  data:
+```
+
+### 開発時の通信フロー
+
+1. **フロントエンド（ローカル:5173）** → **MCPサーバー（Docker:3001）**
+2. **Claude Code** → **MCPサーバー（Docker:3001）**
+3. **フロントエンド** ↔ **WebSocketサーバー（Docker:3002）**
+
 ## コンポーネント設計
 
 ### フロントエンド構造

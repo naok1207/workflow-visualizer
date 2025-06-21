@@ -13,6 +13,11 @@
 - **Real-time**: WebSocket (Socket.io)
 - **Build**: Vite
 - **Test**: Vitest, Playwright
+- **Infrastructure**: Docker, Docker Compose
+
+## 環境構築方針
+- **ローカル環境**: Node.js系ツール、フロントエンド開発サーバー
+- **Docker環境**: MCPサーバー、SQLite、WebSocketサーバー
 
 ## 主要機能
 1. **動的ワークフロー管理**
@@ -50,7 +55,13 @@
 ## よく使うコマンド
 ```bash
 # 開発開始
-npm run dev
+docker-compose up -d      # Dockerコンテナ起動
+npm run dev:frontend      # フロントエンド開発サーバー
+
+# Docker管理
+docker-compose logs -f    # ログ確認
+docker-compose restart    # 再起動
+docker-compose down       # 停止
 
 # 新しいIssue
 gh issue create --title "タイトル"
