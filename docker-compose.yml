@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    build:
+      context: .
+      dockerfile: ./mcp-server/Dockerfile
+    container_name: workflow-mcp-server
+    volumes:
+      - ./data:/app/data
+      - ./mcp-server/src:/app/src:ro
+      - ./shared/src:/app/shared/src:ro
+    environment:
+      - NODE_ENV=development
+      - DATABASE_PATH=/app/data/workflow.db
+      - WEBSOCKET_URL=http://websocket-server:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - websocket-server
+    networks:
+      - workflow-network
+    restart: unless-stopped
+
+  websocket-server:
+    build:
+      context: .
+      dockerfile: ./websocket-server/Dockerfile
+    container_name: workflow-websocket-server
+    volumes:
+      - ./websocket-server/src:/app/src:ro
+      - ./shared/src:/app/shared/src:ro
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    networks:
+      - workflow-network
+    restart: unless-stopped
+
+networks:
+  workflow-network:
+    driver: bridge
+
+volumes:
+  workflow-data:
+    driver: local

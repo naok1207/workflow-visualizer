@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    build:
+      context: .
+      dockerfile: ./mcp-server/Dockerfile
+      target: development
+    container_name: workflow-mcp-server-dev
+    volumes:
+      - ./data:/app/data
+      - ./mcp-server:/app/mcp-server
+      - ./shared:/app/shared
+      - /app/mcp-server/node_modules
+      - /app/shared/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_PATH=/app/data/workflow.db
+      - WEBSOCKET_URL=http://websocket-server:3001
+    command: npm run dev -w mcp-server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - websocket-server
+    networks:
+      - workflow-network
+    restart: unless-stopped
+
+  websocket-server:
+    build:
+      context: .
+      dockerfile: ./websocket-server/Dockerfile
+      target: development
+    container_name: workflow-websocket-server-dev
+    volumes:
+      - ./websocket-server:/app/websocket-server
+      - ./shared:/app/shared
+      - /app/websocket-server/node_modules
+      - /app/shared/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    command: npm run dev -w websocket-server
+    ports:
+      - "3001:3001"
+    networks:
+      - workflow-network
+    restart: unless-stopped
+
+networks:
+  workflow-network:
+    driver: bridge
+
+volumes:
+  workflow-data:
+    driver: local
