@@ -114,6 +114,137 @@ gh pr create --fill --draft
 gh pr merge --squash --delete-branch
 ```
 
+## Puppeteer MCPを使った自動検証
+
+### Puppeteer MCPのセットアップ
+
+#### 1. Claude DesktopでのMCP設定
+
+```json
+// ~/Library/Application Support/Claude/claude_desktop_config.json
+// または該当する設定ファイルに追加
+
+{
+  "mcpServers": {
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
+    },
+    // 既存の設定...
+  }
+}
+```
+
+#### 2. 設定の確認
+
+```bash
+# Claude Desktopを再起動
+# macOS: Cmd+QでClaudeを終了して再起動
+# Windows/Linux: システムトレイから終了して再起動
+```
+
+#### 3. MCP接続の確認
+
+Claude Codeで以下を実行：
+
+```typescript
+// MCPサーバー一覧の確認
+/mcp
+
+// Puppeteer MCPが利用可能か確認
+// 「puppeteer」がリストに表示されることを確認
+```
+
+### 自動検証の実行
+
+#### 1. 基本的な検証スクリプト
+
+```bash
+# 検証スクリプト用ディレクトリの作成
+mkdir -p puppeteer-tests/scenarios
+mkdir -p puppeteer-tests/fixes
+mkdir -p puppeteer-tests/reports
+```
+
+#### 2. Claude Codeでの実行手順
+
+```typescript
+// 1. フロントエンドが起動していることを確認
+// npm run dev:frontend
+
+// 2. 自動検証を開始
+// Claude Codeで以下のプロンプトを実行：
+"ワークフロー可視化システムの自動検証を実行してください。
+Puppeteer MCPを使用して、以下を確認してください：
+1. フロントエンドが正しく表示される
+2. MCPツールが正しく動作する
+3. コンソールエラーがない
+エラーを発見した場合は、修正してPRを作成してください。"
+```
+
+#### 3. 定期的な自動検証
+
+```bash
+# cronジョブとして設定する場合の例
+# (注意: Claude Codeを自動実行するには追加の設定が必要)
+
+# 毎日1回実行
+0 2 * * * /usr/local/bin/run-claude-validation.sh
+```
+
+### トラブルシューティング
+
+#### Puppeteer MCPが利用できない
+
+```bash
+# MCP設定ファイルの場所を確認
+# macOS
+ls ~/Library/Application\ Support/Claude/
+
+# Windows
+dir %APPDATA%\Claude
+
+# Linux
+ls ~/.config/claude/
+```
+
+#### ブラウザが起動しない
+
+```typescript
+// headlessモードで試す
+await puppeteer_launch({
+  headless: true,  // trueに変更
+  args: ['--no-sandbox', '--disable-setuid-sandbox']
+});
+```
+
+#### タイムアウトエラー
+
+```typescript
+// タイムアウトを増やす
+await puppeteer_wait_for_selector({
+  selector: '.slow-element',
+  timeout: 60000  // 60秒
+});
+```
+
+### ベストプラクティス
+
+1. **段階的なテスト**
+   - まず手動で動作確認
+   - 次にClaude Codeでシンプルな検証
+   - 最後に自動修正まで実装
+
+2. **エラーの記録**
+   - すべてのエラーを`puppeteer-tests/reports/`に保存
+   - スクリーンショットを含める
+   - 修正の成功率を追跡
+
+3. **PRの品質**
+   - 明確なコミットメッセージ
+   - 修正前後のスクリーンショット
+   - テスト結果の添付
+
 ## トラブルシューティング
 
 ### Docker関連の問題
